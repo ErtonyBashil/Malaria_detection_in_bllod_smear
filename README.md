@@ -57,7 +57,7 @@ Spatial Attention) component improves spatial
 attention, contributing to more accurate object
 detection and classification.
 
-
+![](images/Archiytecture-YOLO.png)
 YOLO formulates object detection as a sin-
 gle regression task. It divides the image into an S×S grid and assigns each cell the respon-
 sibility for detecting objects whose center falls
@@ -94,7 +94,9 @@ through a CNN backbone (such as ResNet)
 to extract feature maps. These feature maps
 represent the spatial structure and information of yhe image.
 
-DETR ARCTHITEct....
+![](images/Architecture-DETR.png)
+
+
 let I ∈RH×W ×C be the input image, where
 H is the height, W is the width, and C
 is the number of channels. The CNN pro-
@@ -109,31 +111,57 @@ Thus, the encoded feature map becomes:
 
 * Metric
 
-In our study, we used mean accuracy (mAP)
-as our evaluation metric, specifically mAP@0.5
-that combines two essential aspects of ob-
-ject detection. Our ability to localize objects
-(bounding box accuracy) and our accuracy in
-classifying what we found (infected or healthy
-cells). Average Precision (AP): AP is a com-
-bined precision and recall metric, calculated
-as the area under the Precision-Recall curve
-(AUC) calculated for each object class. The
-Mean Average Precision (mAP) is the average
-of the AP values of all detected object classes.
+In our study, we used mean accuracy (mAP) as our evaluation metric, specifically mAP@0.5 that combines two essential aspects of object detection. Our ability to localize objects (bounding box accuracy) and our accuracy in classifying what we found (infected or healthy cells). Average Precision (AP): AP is a combined precision and recall metric, calculated as the area under the Precision-Recall curve (AUC) calculated for each object class. The Mean Average Precision (mAP) is the average of the AP values of all detected object classes.
 
 ##### Development Pipeline
 
 ![](images/pipeline.png)
-The proposed pipeline preprocesses the dataset
-and converts it into a YOLO-compatible for-
-mat. YOLO, DETR, and ResNet models are then trained in parallel to detect uninfected
-cells. After individual testing, ensemble learn-
-ing combines their strengths to improve accu-
-racy, followed by post-processing for final pre-
-dictions.
+The proposed pipeline preprocesses the dataset and converts it into a YOLO-compatible format. YOLO, DETR, and ResNet models are then trained in parallel to detect uninfected cells. After individual testing, ensemble learning combines their strengths to improve accuracy, followed by post-processing for final predictions.
 
 ![](images/architecture.jpg)
 
 As illustrated in Figure 6, the proposed system offers a user-friendly and intuitive interface. After collecting and preparing a patient’s blood sample using a microscope, the user uploads the blood smear image to the dedicated mobile application. This application directly interacts with the integrated artificial intelligence model. The embedded image processing and analysis module examines the sample to determine if it is infected with malaria parasites. In the case of a positive diagnosis, the model automatically performs a detailed analysis to identify whether the detected parasites are trophozoites or affected white blood cells.
 
+##### Experiments and Results
+
+For this task, we experimented with different models, to find the one that generalized best with noisy data.We first tried a segmentation approach, then leveraged pre-trained models from the Hugging Face model library. Initially, we encountered a common limitation of models: poor performance in detecting small objects. We tried several different types of YOLO models, from YOLOv8 to YOLOv10. However, during the writing of this work, YOLO11 was released and was found to be the best performing model. We continuously improved. Resnet, DDQ-DETR , and Ultrallytics-YOLO models, after we found that assembling them was promising.
+
+We used an Ensemble Learning approach to combine the predictions of two parasite detection models: YOLO and DDQ-DETR. The goal was to improve the accuracy by merging their results using the Non-Maximum Suppression (NMS) method, with an Intersection over Union (IoU) threshold set to 0.6 to eliminate redundant predictions.
+
+![](images/Performance_different_models.png)
+
+Figure 1: Model Performance Results
+
+![](images/performance_yolo.png)
+
+Figure 2: Table of Performance Results of the Selected YOLO Model Across Different Classes
+
+![](images/performance_detr.png)
+
+Figure 3: Table of Performance Results of the DETR Model Across Different Object Sizes
+
+The Resnet model has 0.99 accuracy in classifying both positive and negative cells. The Detr model has a slightly higher mAP@50-95 (0.92) compared to Yolo’s (0.87), indicating better accuracy for easier IoU thresholds.
+
+The DQ-Detr can produce fewer false positives,making it more accurate in localizing objects with more relaxed requirements. Generalized accuracy DDQ-Detr: 0.49 and YOLO: 0.46 for (mAP@50-95), Which indicates that DDQ-Detr has a slight advantage in terms of accu-
+racy on IoU thresholds, potentially due to better localization handling.The recall rate represents the model’s intolerance towards false negatives. The DETR model has a higher recall (0.71) than YoLo11m (0.87), suggesting that DETR detects more objects but may include more false positives.
+
+##### Comparaison with state of art
+
+
+![](images/performance_benchmark_yolo.png)
+
+Figure 4: Table of Benchmark Performance of YOLOv11 Model Variants
+
+The results of our study showed contrasting performances between YOLO and DETR models for parasite detection in medical images. While YOLO excels in its ability to detect many objects, especially smaller ones, DDQ-DETR, with its higher accuracy provides better localization and avoid some false positives. By combining the predictions of the three models (binary classification + YOLO + DETR), we obtained a final output that takes advantage of the strengths of each, thus optimizing parasite detection.
+
+![](images/label_prediction.jpg)
+
+Figure 5: Examples of image detection results of Trophozoites and White Blood Cell (WBC)
+
+
+##### future work
+In the future work, the use of ensemble learning could boost overall performance by combining predictions from multiple models via adapted weights, outperforming approaches such as non-maximum suppression (NMS). Introducing a preliminary model to filter out irrelevant images would also optimize resources and improve the analysis of critical cases. To add, applying test time augmentation methods, such as contrast variations or rotations, could increase the robustness of predictions to diverse data.
+
+
+#### Conclusion
+We focused our efforts on improving the state of the art and, to some extent, contributed to the ongoing paradigm shift in the field of automated malaria diagnosis from microscopic images of blood smears. This project explored and demonstrated the effectiveness of artificial intelligence in detecting malaria parasites from medical images, addressing a critical need in endemic regions where trained parasitologists are often lacking. Despite these constraints, the integration of innovative technologies has yielded promising results. The model was then deployed in an end-to-end mobile system, specifically designed to address local constraints in these regions.
