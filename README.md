@@ -1,6 +1,6 @@
 
-# Malaria_detection_in_bllod_smear
----
+## AI-Based Early Diagnosis of Malaria in Blood Smear for Resource-Limited Settings in Africa
+
 AI-Based Early Diagnosis of Malaria in Blood Smear for Resource-Limited Settings in Africa
 
 ### Abstract
@@ -122,7 +122,7 @@ The proposed pipeline preprocesses the dataset and converts it into a YOLO-compa
 
 As illustrated in Figure 6, the proposed system offers a user-friendly and intuitive interface. After collecting and preparing a patient’s blood sample using a microscope, the user uploads the blood smear image to the dedicated mobile application. This application directly interacts with the integrated artificial intelligence model. The embedded image processing and analysis module examines the sample to determine if it is infected with malaria parasites. In the case of a positive diagnosis, the model automatically performs a detailed analysis to identify whether the detected parasites are trophozoites or affected white blood cells.
 
-##### Experiments and Results
+### Experiments and Results
 
 For this task, we experimented with different models, to find the one that generalized best with noisy data.We first tried a segmentation approach, then leveraged pre-trained models from the Hugging Face model library. Initially, we encountered a common limitation of models: poor performance in detecting small objects. We tried several different types of YOLO models, from YOLOv8 to YOLOv10. However, during the writing of this work, YOLO11 was released and was found to be the best performing model. We continuously improved. Resnet, DDQ-DETR , and Ultrallytics-YOLO models, after we found that assembling them was promising.
 
@@ -145,7 +145,7 @@ The Resnet model has 0.99 accuracy in classifying both positive and negative cel
 The DQ-Detr can produce fewer false positives,making it more accurate in localizing objects with more relaxed requirements. Generalized accuracy DDQ-Detr: 0.49 and YOLO: 0.46 for (mAP@50-95), Which indicates that DDQ-Detr has a slight advantage in terms of accu-
 racy on IoU thresholds, potentially due to better localization handling.The recall rate represents the model’s intolerance towards false negatives. The DETR model has a higher recall (0.71) than YoLo11m (0.87), suggesting that DETR detects more objects but may include more false positives.
 
-##### Comparaison with state of art
+### Comparaison with state of art
 
 
 ![](images/performance_benchmark_yolo.png)
@@ -159,9 +159,9 @@ The results of our study showed contrasting performances between YOLO and DETR m
 Figure 5: Examples of image detection results of Trophozoites and White Blood Cell (WBC)
 
 
-##### future work
+### future work
 In the future work, the use of ensemble learning could boost overall performance by combining predictions from multiple models via adapted weights, outperforming approaches such as non-maximum suppression (NMS). Introducing a preliminary model to filter out irrelevant images would also optimize resources and improve the analysis of critical cases. To add, applying test time augmentation methods, such as contrast variations or rotations, could increase the robustness of predictions to diverse data.
 
 
-#### Conclusion
+### Conclusion
 We focused our efforts on improving the state of the art and, to some extent, contributed to the ongoing paradigm shift in the field of automated malaria diagnosis from microscopic images of blood smears. This project explored and demonstrated the effectiveness of artificial intelligence in detecting malaria parasites from medical images, addressing a critical need in endemic regions where trained parasitologists are often lacking. Despite these constraints, the integration of innovative technologies has yielded promising results. The model was then deployed in an end-to-end mobile system, specifically designed to address local constraints in these regions.
